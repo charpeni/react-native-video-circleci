@@ -1,0 +1,3 @@
+rootProject.name = 'ReactNativeVideoCircleCi'
+
+include ':app'
