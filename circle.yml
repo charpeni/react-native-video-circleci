@@ -1,0 +1,24 @@
+machine:
+  node:
+    version: 7
+  environment:
+    PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin"
+    JAVA_OPTS: "-Xms518m -Xmx2048m"
+    GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+
+dependencies:
+  pre:
+    - echo y | android update sdk --no-ui --all --filter "tools,platform-tools,android-23"
+    - echo y | android update sdk --no-ui --all --filter "build-tools-23.0.1"
+  override:
+    - yarn
+    - cd android && ./gradlew app:dependencies
+  cache_directories:
+    - ~/.android
+    - ~/.gradle
+    - ~/.cache/yarn
+
+test:
+  override:
+    - yarn test
+    - cd android && ./gradlew assembleDebug
